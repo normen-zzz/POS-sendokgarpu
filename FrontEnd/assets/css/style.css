@@ -1,0 +1,28 @@
+body {
+  overflow: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+.menu {
+  height: 60vh;
+  overflow-y: scroll;
+}
+
+.menu-harga img {
+  aspect-ratio: 1/1;
+  object-fit: cover;
+}
+
+.menu-harga .card:hover {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+@media only screen and (max-width: 1194px) {
+  .menu {
+    height: 65vh;
+    overflow-y: scroll;
+  }
+}
