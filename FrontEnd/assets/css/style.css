@@ -20,9 +20,50 @@ body {
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
+.card-login img {
+  aspect-ratio: 1/1;
+  object-fit: contain;
+  width: 35%;
+}
+
+.card-login .text-transparent {
+  color: transparent;
+}
+
+#login .card:hover {
+  background-color: aliceblue;
+  transition: 0.5s;
+}
+
+#login .card {
+  transition: 0.5s;
+}
+
+#login .container {
+  /* From https://css.glass */
+  background: rgba(255, 255, 255, 0);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
 @media only screen and (max-width: 1194px) {
   .menu {
     height: 65vh;
     overflow-y: scroll;
+  }
+
+  #login .container {
+    padding: 10px !important;
+  }
+
+  #login {
+    overflow-y: scroll !important;
+    height: 100% !important;
+  }
+
+  body {
+    overflow: auto;
   }
 }
