@@ -48,6 +48,12 @@ body {
   -webkit-backdrop-filter: blur(20px);
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 @media only screen and (max-width: 1194px) {
   .menu {
     height: 65vh;
