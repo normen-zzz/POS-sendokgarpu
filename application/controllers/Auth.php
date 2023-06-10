@@ -21,8 +21,6 @@ class Auth extends CI_Controller
     public function index()
     {
         $this->_has_login();
-
-        $this->form_validation->set_rules('username', 'Username', 'required|trim');
         $this->form_validation->set_rules('password', 'Password', 'required|trim');
 
         if ($this->form_validation->run() == false) {
