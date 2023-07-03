@@ -1,102 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Sendok Garpu</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
-      crossorigin="anonymous"
-    />
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Sendok Garpu</title>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+			crossorigin="anonymous"
+		/>
 
-    <link rel="stylesheet" href="./assets/css/style.css" />
-  </head>
-  <body>
-    <section id="login" class="" style="height: 100vh;background-color:#6c221f;">
-      <div class="d-flex h-100">
-        <div
-          class="container bg-white align-self-center"
-          style="padding: 100px"
-        >
-          <div class="row text-center">
-            <h1 class="">LOGIN</h1>
-          </div>
-          <div class="row justify-content-center">
-            <div class="col-md-4 py-2">
-            </div>
-            <div class="col-md-4 py-2">
-              <div class="card card-login text-center pb-3 pt-5">
-                <img
-                  src="./assets/image/img.png"
-                  class="card-img-top mx-auto rounded-circle bg-warning"
-                  alt="..."
-                />
-                <div class="card-body">
-                  <h5 class="card-title">Please Input Your PIN</h5>
-                  <a
-                    href="#"
-                    class="stretched-link"
-                    data-bs-toggle="modal"
-                    data-bs-target="#staticBackdrop"
-                  ></a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 py-2">
- 
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+		<link rel="stylesheet" href="./assets/css/style.css" />
+	</head>
+	<body>
+		<section
+			id="login"
+			class=""
+			style="height: 100vh; background-color: #6c221f"
+		>
+			<div class="d-flex h-100">
+				<div
+					class="container bg-white align-self-center"
+					style="padding: 100px"
+				>
+					<div class="row text-center">
+						<h1 class="">LOGIN</h1>
+					</div>
+					<div class="row justify-content-center">
+						<div class="col-md-4 py-2"></div>
+						<div class="col-md-4 py-2">
+							<div class="card card-login text-center pb-3 pt-5">
+								<img
+									src="./assets/image/img.png"
+									class="card-img-top mx-auto rounded-circle bg-warning"
+									alt="..."
+								/>
+								<div class="card-body">
+									<div class="form-floating mb-3">
+										<input
+											type="number"
+											class="form-control"
+											id="floatingInput"
+											placeholder="PIN"
+										/>
+										<label for="floatingInput">PIN</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 py-2"></div>
+					</div>
+				</div>
+			</div>
+		</section>
 
-    <!-- Modal -->
-    <div
-      class="modal fade"
-      id="staticBackdrop"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-labelledby="staticBackdropLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">
-              Masukan PIN
-            </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <div class="form-floating mb-3">
-              <input
-                type="number"
-                class="form-control"
-                id="floatingInput"
-                placeholder="PIN"
-              />
-              <label for="floatingInput">PIN</label>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <a href="./index.html" class="btn btn-primary">Masuk</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-      crossorigin="anonymous"
-    ></script>
-  </body>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+			crossorigin="anonymous"
+		></script>
+	</body>
 </html>
