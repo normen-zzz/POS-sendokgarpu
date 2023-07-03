@@ -19,7 +19,7 @@ class Login extends CI_Controller
    public function index(){
         $data = [
           'title' => 'Login',
-          'user' => $this->db->get('user')->result_array()
+          
         ];
         $this->load->view('front/login/login', $data);
    }

@@ -27,7 +27,7 @@
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                Order History
+                Report
               </a>
               <ul class="dropdown-menu bg-secondary">
                 <li>
@@ -81,126 +81,63 @@
     <section>
       <div class="container-fluid">
         <div class="row pt-3">
-          <div class="col-4">
-            <form class="d-flex" role="search">
-              <input
-                class="form-control rounded-pill border border-secondary"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-              />
-            </form>
+          <div class="col">
+            <button class="rounded-pill btn btn-outline-secondary w-100">
+              PRINT
+            </button>
+          </div>
+          <div class="col">
+           
           </div>
           <div class="col">
             <button class="rounded-pill btn btn-outline-secondary w-100">
-              DATE
+              START DATE
             </button>
           </div>
           <div class="col">
             <button class="rounded-pill btn btn-outline-secondary w-100">
-              ORDER
-            </button>
-          </div>
-          <div class="col">
-            <button class="rounded-pill btn btn-outline-secondary w-100">
-              PAYMENT
+              END DATE
             </button>
           </div>
           <div class="col">
             <button class="rounded-pill btn btn-success w-100">SHOW</button>
           </div>
         </div>
+        
+        
+        
         <div
           class="row px-3 mt-5"
           style="height: 85vh !important; overflow-y: scroll"
         >
           <div class="col">
-            <table class="table">
+              
+              <table class="table">
               <thead>
+                                  <tr>
+                  <th scope="row">Date 20/05/23 - 22/05/23</th>
                 <tr>
-                  <th scope="col">#Invoice</th>
-                  <th scope="col">Date</th>
-                  <th scope="col">Order Details</th>
-                  <th scope="col">Payment Method</th>
-                  <th scope="col" colspan="2">Total</th>
+                <tr>
+                  <th scope="col">Total Sales</th>
+                  <th scope="col">Number of Sales</th>
+                  <th scope="col">Discounts Total</th>
+                  <th scope="col">Tax</th>
+                  <th scope="col">Cash Payments</th>
+                  <th scope="col">Card Payments</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <th scope="row">002183187417</th>
-                  <td>0:30PM 11/01/23</td>
-                  <td>#151 - Takeaway</td>
-                  <td>Cash</td>
-                  <td>$159.00</td>
-                  <td>
-                    <div class="dropdown">
-                      <button
-                        class="btn btn-sm btn-secondary dropdown-toggle"
-                        type="button"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                      ></button>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Edit</a></li>
-                        <li><a class="dropdown-item" href="#">Delete</a></li>
-                      </ul>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">002183187416</th>
-                  <td>0:30PM 11/01/23</td>
-                  <td>#150 - Table 13</td>
-                  <td>Credit Card</td>
-                  <td>$24.00</td>
-                  <td>
-                    <div class="dropdown">
-                      <button
-                        class="btn btn-sm btn-secondary dropdown-toggle"
-                        type="button"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                      ></button>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Edit</a></li>
-                        <li><a class="dropdown-item" href="#">Delete</a></li>
-                      </ul>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">002183187415</th>
-                  <td>0:30PM 11/01/23</td>
-                  <td>#149 - Table 2</td>
-                  <td>Cash</td>
-                  <td>$54.00</td>
-                  <td>
-                    <div class="dropdown">
-                      <button
-                        class="btn btn-sm btn-secondary dropdown-toggle"
-                        type="button"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                      ></button>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Edit</a></li>
-                        <li><a class="dropdown-item" href="#">Delete</a></li>
-                      </ul>
-                    </div>
-                  </td>
+                  <th scope="row">$10.240,50</th>
+                  <td>240</td>
+                  <td>-$420.006</td>
+                  <td>$133.57</td>
+                  <td>$5123.20</td>
+                  <td>$4712.50</td>
                 </tr>
               </tbody>
-              <thead>
-                <tr>
-                  <th scope="col">Number of Orders : 3</th>
-                  <th scope="col"></th>
-                  <th scope="col"></th>
-                  <th scope="col"></th>
-                  <th scope="col" colspan="2">Total : $358.00</th>
-                </tr>
-              </thead>
-              
             </table>
+              
           </div>
         </div>
       </div>
