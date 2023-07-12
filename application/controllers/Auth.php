@@ -14,7 +14,7 @@ class Auth extends CI_Controller
     private function _has_login()
     {
         if ($this->session->has_userdata('login_session')) {
-            redirect('dashboard');
+            redirect('Dashboard');
         }
     }
 
@@ -31,7 +31,6 @@ class Auth extends CI_Controller
               $this->load->view('front/login/login', $data);
         } else {
             $input = $this->input->post(null, true);
-
             $cekPin = $this->db->get_where('user',array('pin' => $input['pin']));
             
             if ($cekPin->num_rows() == 1) {
@@ -39,7 +38,7 @@ class Auth extends CI_Controller
                 $userDb = $this->db->get_where('user',array('pin' => $input['pin']))->row_array();
                     if ($userDb['is_active'] != 1) {
                         set_pesan('akun anda belum aktif/dinonaktifkan. Silahkan hubungi admin.', false);
-                        redirect('login');
+                        redirect('Auth');
                     } else {
                         $userdata = [
                             'user'  => $userDb['id_user'],
@@ -52,7 +51,7 @@ class Auth extends CI_Controller
                
             } else {
                 set_pesan('Pin Belum Terdaftar', false);
-                redirect('auth');
+                redirect('Auth');
             }
         }
     }
