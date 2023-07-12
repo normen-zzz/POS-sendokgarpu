@@ -21,37 +21,37 @@ class Auth extends CI_Controller
     public function index()
     {
         $this->_has_login();
-        $this->form_validation->set_rules('password', 'Password', 'required|trim');
+
+        $this->form_validation->set_rules('pin', 'Pin', 'required');
 
         if ($this->form_validation->run() == false) {
-            $data['title'] = 'Login Aplikasi';
-            $this->template->load('templates/auth', 'auth/login', $data);
+            $data = [
+                'title' => 'Login',
+              ];
+              $this->load->view('front/login/login', $data);
         } else {
             $input = $this->input->post(null, true);
 
-            $cek_username = $this->auth->cek_username($input['username']);
-            if ($cek_username > 0) {
-                $password = $this->auth->get_password($input['username']);
-                if (password_verify($input['password'], $password)) {
-                    $user_db = $this->auth->userdata($input['username']);
-                    if ($user_db['is_active'] != 1) {
+            $cekPin = $this->db->get_where('user',array('pin' => $input['pin']));
+            
+            if ($cekPin->num_rows() == 1) {
+                
+                $userDb = $this->db->get_where('user',array('pin' => $input['pin']))->row_array();
+                    if ($userDb['is_active'] != 1) {
                         set_pesan('akun anda belum aktif/dinonaktifkan. Silahkan hubungi admin.', false);
                         redirect('login');
                     } else {
                         $userdata = [
-                            'user'  => $user_db['id_user'],
-                            'role'  => $user_db['role'],
+                            'user'  => $userDb['id_user'],
+                            'role'  => $userDb['role'],
                             'timestamp' => time()
                         ];
                         $this->session->set_userdata('login_session', $userdata);
-                        redirect('dashboard');
+                        redirect('Dashboard');
                     }
-                } else {
-                    set_pesan('password salah', false);
-                    redirect('auth');
-                }
+               
             } else {
-                set_pesan('username belum terdaftar', false);
+                set_pesan('Pin Belum Terdaftar', false);
                 redirect('auth');
             }
         }

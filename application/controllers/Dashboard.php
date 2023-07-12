@@ -9,13 +9,17 @@ class Dashboard extends CI_Controller
         // cek_login();
 
         $this->load->model('Admin_model', 'admin');
+
+        $userId = $this->session->userdata('login_session')['user'];
+        $this->user = $this->admin->get('user', ['id_user' => $userId]);
     }
 
     public function index()
     {
         // echo "masuk dashboard";
         $data = [
-            'title' => 'Dashboard'
+            'title' => 'Dashboard',
+            'user' =>  $this->user 
         ];
         $this->template->load('front/templates/dashboard', 'front/dashboard', $data);
     }
