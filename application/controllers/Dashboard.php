@@ -14,10 +14,16 @@ class Dashboard extends CI_Controller
         $this->user = $this->admin->get('user', ['id_user' => $userId]);
     }
 
-
+    private function _has_login()
+    {
+        if (!$this->session->has_userdata('login_session')) {
+            redirect('Auth');
+        }
+    }
 
     public function index()
     {
+        $this->_has_login();
         // echo "masuk dashboard";
         $data = [
             'title' => 'Dashboard',
@@ -38,5 +44,35 @@ class Dashboard extends CI_Controller
         }
 
         echo json_encode($data);
+    }
+
+    public function add_to_cart()
+    {
+
+        $cart = array();
+
+        $product = $this->db->get_where('product',array('id_product' => $this->input->get('id_product')))->row_array();
+        $data = array(
+            'id' => $this->input->get('id_product'),
+            'qty' => 1,
+            'price' => $product['price_product'],
+            'name' => $product['nama_product'],
+            'photo' => $product['image'],
+        );
+        $this->cart->insert($data);
+        
+
+        foreach ($this->cart->contents() as $items){
+            $cart[] = $items;
+        }
+        echo json_encode($cart);
+    }
+
+    public function destroyCart() {
+        $this->cart->destroy();
+    }
+
+    public function showCart() {
+        var_dump($this->cart->contents());
     }
 }
