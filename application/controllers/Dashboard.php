@@ -28,16 +28,17 @@ class Dashboard extends CI_Controller
         $data = [
             'title' => 'Dashboard',
             'user' =>  $this->user,
-            'kategori' => $this->db->get('kategori')
+            'category' => $this->db->get('category'),
+            'product' => $this->db->get('product'),
         ];
         $this->template->load('front/templates/dashboard', 'front/dashboard', $data);
     }
 
     public function getProductByCategory()
     {
-        $id_kategori = $this->input->get('id_kategori');
+        $id_category = $this->input->get('id_category');
         $data = array();
-        $product = $this->db->get_where('product', array('id_kategori' => $id_kategori))->result_array();
+        $product = $this->db->get_where('product', array('id_category' => $id_category))->result_array();
 
         foreach ($product as $product1) {
             $data[] = $product1;
@@ -56,7 +57,7 @@ class Dashboard extends CI_Controller
             'id' => $this->input->get('id_product'),
             'qty' => 1,
             'price' => $product['price_product'],
-            'name' => $product['nama_product'],
+            'name' => $product['name_product'],
             'photo' => $product['image'],
         );
         $this->cart->insert($data);
@@ -70,6 +71,7 @@ class Dashboard extends CI_Controller
 
     public function destroyCart() {
         $this->cart->destroy();
+        redirect('Dashboard');
     }
 
     public function showCart() {

@@ -27,19 +27,41 @@
                   <td style="text-align: center">
                     Price
                   </td>
+
+                  <td style="text-align: center">
+                    Total
+                  </td>
+
                   <td style="text-align: center">
                     Action
                   </td>
                 </tr>
+
+                <?php
+                $subtotal = 0;
+                foreach ($this->cart->contents() as $cart) {
+                  $subtotal += $cart['subtotal'];
+                ?>
+                  <tr>
+                    <td style="width: 60%"><?= $cart['name'] ?></td>
+                    <td style="text-align: center"><?= $cart['qty'] ?></td>
+                    <td style="text-align: center"><?= $cart['price'] ?></td>
+                    <td style="text-align: center"><?= $cart['subtotal'] ?></td>
+                    <td style="text-align: center">
+                      <button class="btn btn-secondary">edit</button>
+                      <button class="btn btn-danger">X</button>
+                    </td>
+                  </tr>
+                <?php } ?>
 
               </table>
             </div>
           </div>
           <div class="col-md-2 text-center bg p-0">
             <div class="menu">
-              <?php foreach ($kategori->result_array() as $kategori1) { ?>
-                <button class="btn btn-outline-secondary w-100 kategori" data-id_kategori="<?= $kategori1['id_kategori'] ?>" style="height: 60px; margin-top: 10px; margin-bottom: 5px">
-                  <?= $kategori1['nama_kategori'] ?>
+              <?php foreach ($category->result_array() as $category1) { ?>
+                <button class="btn btn-outline-secondary w-100 category" data-id_category="<?= $category1['id_category'] ?>" style="height: 60px; margin-top: 10px; margin-bottom: 5px">
+                  <?= $category1['name_category'] ?>
                 </button>
               <?php } ?>
             </div>
@@ -56,21 +78,28 @@
                 </tr>
                 <tr>
                   <th scope="col">SUBTOTAL</th>
-                  <td scope="col">$38.90</td>
+                  <td scope="col">
+                    <div id="subtotal">
+                      $<?= $subtotal ?>
+                    </div>
+                  </td>
                   <th scope="col" class="text-end h4">Total</th>
                 </tr>
                 <tr>
                   <th scope="col">TAX</th>
                   <td scope="col">10% + Student Disc.</td>
                   <td scope="col" class="text-success h3 fw-bold text-end">
-                    $42.79
+                    <div id="finalTotal">
+                      $<?= $subtotal + ($subtotal * 0.1) ?>
+                    </div>
+
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <button class="btn btn-outline-dark w-100">
+                    <a href="<?= base_url('Dashboard/destroyCart') ?>" class="btn btn-outline-dark w-100">
                       CLEAR
-                    </button>
+                    </a>
                   </td>
                   <td>
                     <button class="btn btn-outline-dark w-100">SEND</button>
@@ -91,70 +120,16 @@
       </div>
       <div class="col-md-6 pt-3 overflow-scroll" style="height: 95vh">
         <div class="row menu-harga" id="productByCategory">
-          <div class="col-3">
-            <div class="card text-center border-2 my-2">
-              <img src="<?= base_url('assets/front') ?>/image/1.jpg" class="card-img-top" style="padding: 5px" alt="..." />
-              <div class="card-body">
-                <a href="#" class="btn stretched-link">W1. Nasi Goreng</a>
+          <?php foreach ($product->result_array() as $product1) { ?>
+            <div class="col-3">
+              <div class="card text-center border-2 my-2 productToCart" data-id_product="<?= $product1['id_product'] ?>">
+                <img src="<?= base_url('assets/front/image/' . $product1['image']) ?>" class="card-img-top" style="padding: 5px" alt="..." />
+                <div class="card-body">
+                  <a href="#" class="btn stretched-link"><?= $product1['name_product'] ?></a>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-3">
-            <div class="card text-center border-2 my-2">
-              <img src="<?= base_url('assets/front') ?>/image/2.jpg" class="card-img-top" style="padding: 5px" alt="..." />
-              <div class="card-body">
-                <a href="#" class="btn stretched-link">W2. Mie Aceh Gor/ Reb</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="card text-center border-2 my-2">
-              <img src="<?= base_url('assets/front') ?>/image/3.jpeg" class="card-img-top" style="padding: 5px" alt="..." />
-              <div class="card-body">
-                <a href="#" class="btn stretched-link">W3. Mie Goreng</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="card text-center border-2 my-2">
-              <img src="<?= base_url('assets/front') ?>/image/4.jpg" class="card-img-top" style="padding: 5px" alt="..." />
-              <div class="card-body">
-                <a href="#" class="btn stretched-link">W4. Kwetiau Goreng</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="card text-center border-2 my-2">
-              <img src="<?= base_url('assets/front') ?>/image/1.jpg" class="card-img-top" style="padding: 5px" alt="..." />
-              <div class="card-body">
-                <a href="#" class="btn stretched-link">W1. Nasi Goreng</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="card text-center border-2 my-2">
-              <img src="<?= base_url('assets/front') ?>/image/2.jpg" class="card-img-top" style="padding: 5px" alt="..." />
-              <div class="card-body">
-                <a href="#" class="btn stretched-link">W2. Mie Aceh Gor/ Reb</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="card text-center border-2 my-2">
-              <img src="<?= base_url('assets/front') ?>/image/3.jpeg" class="card-img-top" style="padding: 5px" alt="..." />
-              <div class="card-body">
-                <a href="#" class="btn stretched-link">W3. Mie Goreng</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="card text-center border-2 my-2">
-              <img src="<?= base_url('assets/front') ?>/image/4.jpg" class="card-img-top" style="padding: 5px" alt="..." />
-              <div class="card-body">
-                <a href="#" class="btn stretched-link">W4. Kwetiau Goreng</a>
-              </div>
-            </div>
-          </div>
+          <?php } ?>
         </div>
       </div>
     </div>
@@ -170,8 +145,9 @@
 
 <script>
   $(document).ready(function() {
-    $('.kategori').click(function() {
-      var id_kategori = $(this).data('id_kategori'); // Mendapatkan ID dari atribut data-id tombol yang diklik
+    $(document).on('click', '.category', function() {
+      // alert('clocker');
+      var id_category = $(this).data('id_category'); // Mendapatkan ID dari atribut data-id tombol yang diklik
       $('#productByCategory').html('');
       // Memuat data menggunakan AJAX dengan mengirimkan ID sebagai parameter
       $.ajax({
@@ -179,7 +155,7 @@
         type: 'GET',
         dataType: 'json',
         data: {
-          id_kategori: id_kategori
+          id_category: id_category
         },
         success: function(response) {
           var content = '';
@@ -189,7 +165,7 @@
               '<div class="card text-center border-2 my-2 productToCart" data-id_product = "' + data.id_product + '">' +
               '<img src="<?= base_url('assets/front') ?>/image/' + data.image + '" class="card-img-top" style="padding: 5px" alt="..." />' +
               '<div class="card-body">' +
-              '<button class="btn stretched-link">' + data.nama_product + '</button>' +
+              '<button class="btn stretched-link">' + data.name_product + '</button>' +
               '</div>' +
               '</div>' +
               '</div>';
@@ -230,9 +206,13 @@
             'Price' +
             '</td>' +
             '<td style="text-align: center">' +
+            'Total' +
+            '</td>' +
+            '<td style="text-align: center">' +
             'Action' +
             '</td>' +
             '</tr>';
+          var subtotal = 0;
           for (var i = 0; i < response.length; i++) {
             var data = response[i];
             content += '<tr>' +
@@ -242,13 +222,20 @@
               data.price +
               '</td>' +
               '<td style="text-align: center">' +
+              (Math.round(data.subtotal * 100) / 100).toFixed(2) +
+              '</td>' +
+              '<td style="text-align: center">' +
               '<button class="btn btn-secondary">edit</button>' +
               '<button class="btn btn-danger">X</button>' +
               '</td>' +
               '</tr>';
 
+            subtotal += data.subtotal;
           }
           $('#cart').html(content);
+          $('#subtotal').html('$' + (Math.round(subtotal * 100) / 100).toFixed(2));
+          $('#finalTotal').html('$' + (Math.round((subtotal + (subtotal * 0.1)) * 100) / 100).toFixed(2));
+
 
 
         },

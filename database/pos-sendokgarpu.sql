@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 09, 2023 at 12:11 AM
+-- Generation Time: Jul 14, 2023 at 08:39 AM
 -- Server version: 10.11.0-MariaDB
 -- PHP Version: 7.4.19
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `sendokgarpu`
+-- Database: `pos-sendokgarpu`
 --
 
 -- --------------------------------------------------------
@@ -522,6 +522,28 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `category`
+--
+
+CREATE TABLE `category` (
+  `id_category` int(11) NOT NULL,
+  `name_category` varchar(50) NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `is_deleted` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `category`
+--
+
+INSERT INTO `category` (`id_category`, `name_category`, `created_by`, `created_at`, `is_deleted`) VALUES
+(1, 'Nasi Padang', 1, '2023-07-12 13:42:52', 0),
+(2, 'Entree', 1, '2023-07-12 13:43:32', 0);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `jenis`
 --
 
@@ -550,6 +572,61 @@ INSERT INTO `jenis` (`id_jenis`, `nama_jenis`, `user_id`, `created_att`, `update
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `product`
+--
+
+CREATE TABLE `product` (
+  `id_product` int(11) NOT NULL,
+  `id_category` int(11) NOT NULL,
+  `code_product` varchar(50) NOT NULL,
+  `name_product` varchar(50) NOT NULL,
+  `image` varchar(100) NOT NULL,
+  `price_product` float NOT NULL,
+  `describe_product` text DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `created_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `product`
+--
+
+INSERT INTO `product` (`id_product`, `id_category`, `code_product`, `name_product`, `image`, `price_product`, `describe_product`, `created_at`, `created_by`) VALUES
+(1, 1, '', 'ayam goyeng', '1.jpg', 20.2, 'eheehehhehe\r\n', '2023-07-12 15:05:49', 1),
+(2, 2, '', 'ayam rebus', '2.jpg', 12.55, 'xsajxanxksajnxskajn', '2023-07-12 15:06:05', 1),
+(3, 1, '', 'bebek goyeng', '2.jpg', 11.11, 'hxhsxhsxhshxs', '2023-07-12 15:07:01', 1),
+(4, 1, '', 'bebek goyeng', '2.jpg', 2.44, 'hxhsxhsxhshxs', '2023-07-12 15:07:01', 1),
+(5, 1, '', 'bebek goyeng', '2.jpg', 3.54, 'hxhsxhsxhshxs', '2023-07-12 15:07:01', 1),
+(6, 1, '', 'bebek goyeng', '2.jpg', 4.55, 'hxhsxhsxhshxs', '2023-07-12 15:07:01', 1),
+(7, 1, '', 'bebek goyeng', '2.jpg', 6.11, 'hxhsxhsxhshxs', '2023-07-12 15:07:01', 1),
+(8, 1, '', 'bebek goyeng', '2.jpg', 2.44, 'hxhsxhsxhshxs', '2023-07-12 15:07:01', 1),
+(9, 1, '', 'bebek goyeng', '2.jpg', 5.66, 'hxhsxhsxhshxs', '2023-07-12 15:07:01', 1),
+(10, 1, '', 'bebek goyeng', '2.jpg', 6.12, 'hxhsxhsxhshxs', '2023-07-12 15:07:01', 1),
+(11, 1, '', 'bebek goyeng', '2.jpg', 9.22, 'hxhsxhsxhshxs', '2023-07-12 15:07:01', 1),
+(12, 1, '', 'bebek goyeng', '2.jpg', 5.66, 'hxhsxhsxhshxs', '2023-07-12 15:07:01', 1),
+(13, 1, '', 'xjsxjsnxjs', '2.jpg', 9.22, 'ujxnjsnxjsnxksxnskj		', '2023-07-12 15:28:12', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transaction`
+--
+
+CREATE TABLE `transaction` (
+  `id_transaction` int(11) NOT NULL,
+  `code_transaction` varchar(100) NOT NULL,
+  `id_product` int(11) NOT NULL,
+  `price_product` float NOT NULL,
+  `qty` int(11) NOT NULL,
+  `notes` text DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `disc` float DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `user`
 --
 
@@ -557,6 +634,7 @@ CREATE TABLE `user` (
   `id_user` int(11) NOT NULL,
   `nama` varchar(50) NOT NULL,
   `username` varchar(50) NOT NULL,
+  `pin` int(11) NOT NULL,
   `email` varchar(100) NOT NULL,
   `no_telp` varchar(15) NOT NULL,
   `role` enum('user','admin') NOT NULL,
@@ -570,11 +648,11 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id_user`, `nama`, `username`, `email`, `no_telp`, `role`, `password`, `created_at`, `foto`, `is_active`) VALUES
-(1, 'Administrator', 'admin', 'admin@admin.com', '025123456789', 'admin', '$2y$10$wMgi9s3FEDEPEU6dEmbp8eAAEBUXIXUy3np3ND2Oih.MOY.q/Kpoy', '2023-03-28 02:24:38', 'user.png', 1),
-(15, 'user123', 'user123', 'user123@gmail.com', '098765434567', 'user', '$2y$10$x2nFUQnnNwnX3phmsDTQ0eeNQ11UX.srfyizy8eEPFAnhPCU3j2fu', '2023-03-29 08:57:06', 'user.png', 1),
-(17, 'Siska', 'siska', 'franssiscaxaveria@gmail.com', '+62878710923', 'user', '$2y$10$uzOfqV2YgomsJiEQc.g2W.7KdZ.ou6We7Re9Zst5BIoLdJ6k.QHUu', '2023-04-04 15:45:37', 'user.png', 1),
-(18, 'Intan', 'intan', 'intan@gmail.com', '+61452336254', 'user', '$2y$10$lNy8Ba8kT3vWkECmh1RrlONZBE1eNCXv3PWf6q/AUgdweW06MJQTm', '2023-04-04 15:50:33', 'user.png', 1);
+INSERT INTO `user` (`id_user`, `nama`, `username`, `pin`, `email`, `no_telp`, `role`, `password`, `created_at`, `foto`, `is_active`) VALUES
+(1, 'Administrator', 'admin', 1111, 'admin@admin.com', '025123456789', 'admin', '$2y$10$wMgi9s3FEDEPEU6dEmbp8eAAEBUXIXUy3np3ND2Oih.MOY.q/Kpoy', '2023-03-28 02:24:38', 'user.png', 1),
+(15, 'user123', 'user123', 2222, 'user123@gmail.com', '098765434567', 'user', '$2y$10$x2nFUQnnNwnX3phmsDTQ0eeNQ11UX.srfyizy8eEPFAnhPCU3j2fu', '2023-03-29 08:57:06', 'user.png', 1),
+(17, 'Siska', 'siska', 3333, 'franssiscaxaveria@gmail.com', '+62878710923', 'user', '$2y$10$uzOfqV2YgomsJiEQc.g2W.7KdZ.ou6We7Re9Zst5BIoLdJ6k.QHUu', '2023-04-04 15:45:37', 'user.png', 1),
+(18, 'Intan', 'intan', 4444, 'intan@gmail.com', '+61452336254', 'user', '$2y$10$lNy8Ba8kT3vWkECmh1RrlONZBE1eNCXv3PWf6q/AUgdweW06MJQTm', '2023-04-04 15:50:33', 'user.png', 1);
 
 --
 -- Indexes for dumped tables
@@ -605,12 +683,30 @@ ALTER TABLE `barang_masuk`
   ADD KEY `barang_id` (`barang_id`);
 
 --
+-- Indexes for table `category`
+--
+ALTER TABLE `category`
+  ADD PRIMARY KEY (`id_category`);
+
+--
 -- Indexes for table `jenis`
 --
 ALTER TABLE `jenis`
   ADD PRIMARY KEY (`id_jenis`),
   ADD KEY `nama_jenis` (`nama_jenis`),
   ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `product`
+--
+ALTER TABLE `product`
+  ADD PRIMARY KEY (`id_product`);
+
+--
+-- Indexes for table `transaction`
+--
+ALTER TABLE `transaction`
+  ADD PRIMARY KEY (`id_transaction`);
 
 --
 -- Indexes for table `user`
@@ -623,10 +719,28 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT for table `category`
+--
+ALTER TABLE `category`
+  MODIFY `id_category` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `jenis`
 --
 ALTER TABLE `jenis`
   MODIFY `id_jenis` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- AUTO_INCREMENT for table `product`
+--
+ALTER TABLE `product`
+  MODIFY `id_product` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `transaction`
+--
+ALTER TABLE `transaction`
+  MODIFY `id_transaction` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user`
