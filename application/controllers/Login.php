@@ -52,7 +52,7 @@ class Login extends CI_Controller
                
             } else {
                 set_pesan('Pin Belum Terdaftar', false);
-                redirect('auth');
+                redirect('Auth');
             }
         }
     }
