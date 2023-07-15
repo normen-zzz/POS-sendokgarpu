@@ -299,7 +299,14 @@
 												</button>
 											</td>
 											<td>
-												<button class="btn btn-success w-100">PAY</button>
+												<button
+													type="button"
+													data-bs-toggle="modal"
+													data-bs-target="#exampleModal"
+													class="btn btn-success w-100"
+												>
+													PAY
+												</button>
 											</td>
 										</tr>
 									</tbody>
@@ -426,6 +433,156 @@
 				</div>
 			</div>
 		</section>
+
+		<!-- Modal -->
+		<div
+			class="modal fade"
+			id="exampleModal"
+			tabindex="-1"
+			aria-labelledby="exampleModalLabel"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog modal-dialog-centered modal-xl">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"
+						></button>
+					</div>
+					<div class="modal-body">
+						<div class="container">
+							<div class="row justify-content-center">
+								<div class="col-2 py-2">
+									<div class="card">
+										<div class="card-body bg-danger text-white rounded-2">
+											<h5 class="card-title">Table No.01</h5>
+											<p class="card-text">
+												cost: <span class="fw-bold">Rp. 100.000</span>
+											</p>
+											<p class="card-text">
+												time: <span class="fw-bold">12.00</span>
+											</p>
+											<p class="card-text">
+												Order No.: <span class="fw-bold">#123</span>
+											</p>
+										</div>
+									</div>
+								</div>
+								<div class="col-2 py-2">
+									<div class="card">
+										<div class="card-body bg-secondary text-white rounded-2">
+											<h5 class="card-title">Table No.02</h5>
+											<p class="card-text">
+												cost: <span class="fw-bold"></span>
+											</p>
+											<p class="card-text">
+												time: <span class="fw-bold"></span>
+											</p>
+											<p class="card-text">
+												Order No.: <span class="fw-bold"></span>
+											</p>
+										</div>
+									</div>
+								</div>
+								<div class="col-2 py-2">
+									<div class="card">
+										<div class="card-body bg-secondary text-white rounded-2">
+											<h5 class="card-title">Table No.03</h5>
+											<p class="card-text">
+												cost: <span class="fw-bold"></span>
+											</p>
+											<p class="card-text">
+												time: <span class="fw-bold"></span>
+											</p>
+											<p class="card-text">
+												Order No.: <span class="fw-bold"></span>
+											</p>
+										</div>
+									</div>
+								</div>
+								<div class="col-2 py-2">
+									<div class="card">
+										<div class="card-body bg-secondary text-white rounded-2">
+											<h5 class="card-title">Table No.04</h5>
+											<p class="card-text">
+												cost: <span class="fw-bold"></span>
+											</p>
+											<p class="card-text">
+												time: <span class="fw-bold"></span>
+											</p>
+											<p class="card-text">
+												Order No.: <span class="fw-bold"></span>
+											</p>
+										</div>
+									</div>
+								</div>
+								<div class="col-2 py-2">
+									<div class="card">
+										<div class="card-body bg-secondary text-white rounded-2">
+											<h5 class="card-title">Table No.05</h5>
+											<p class="card-text">
+												cost: <span class="fw-bold"></span>
+											</p>
+											<p class="card-text">
+												time: <span class="fw-bold"></span>
+											</p>
+											<p class="card-text">
+												Order No.: <span class="fw-bold"></span>
+											</p>
+										</div>
+									</div>
+								</div>
+								<div class="col-2 py-2">
+									<div class="card">
+										<div class="card-body bg-secondary text-white rounded-2">
+											<h5 class="card-title">Table No.06</h5>
+											<p class="card-text">
+												cost: <span class="fw-bold"></span>
+											</p>
+											<p class="card-text">
+												time: <span class="fw-bold"></span>
+											</p>
+											<p class="card-text">
+												Order No.: <span class="fw-bold"></span>
+											</p>
+										</div>
+									</div>
+								</div>
+								<div class="col-2 py-2">
+									<div class="card">
+										<div class="card-body bg-secondary text-white rounded-2">
+											<h5 class="card-title">Table No.07</h5>
+											<p class="card-text">
+												cost: <span class="fw-bold"></span>
+											</p>
+											<p class="card-text">
+												time: <span class="fw-bold"></span>
+											</p>
+											<p class="card-text">
+												Order No.: <span class="fw-bold"></span>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button
+							type="button"
+							class="btn btn-danger"
+							data-bs-dismiss="modal"
+						>
+							Dine In
+						</button>
+						<button type="button" class="btn btn-secondary">Take Way</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 		<script>
 			$("button").on("click", function () {
