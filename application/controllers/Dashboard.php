@@ -74,7 +74,25 @@ class Dashboard extends CI_Controller
         redirect('Dashboard');
     }
 
-    public function showCart() {
+	public function destroyCartById($id_product) {
+		$cart_contents = $this->cart->contents();
+
+		foreach ($cart_contents as $item) {
+			if ($item['id'] == $id_product) {
+				$data = array(
+					'rowid' => $item['rowid'],
+					'qty' => 0
+				);
+
+				$this->cart->update($data);
+				break; 
+			}
+		}
+		redirect('dashboard');
+	}
+
+
+	public function showCart() {
         var_dump($this->cart->contents());
     }
 }
