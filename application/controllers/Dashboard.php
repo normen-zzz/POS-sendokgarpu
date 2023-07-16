@@ -17,7 +17,7 @@ class Dashboard extends CI_Controller
     private function _has_login()
     {
         if (!$this->session->has_userdata('login_session')) {
-            redirect('Auth');
+            redirect('auth');
         }
     }
 
@@ -71,7 +71,7 @@ class Dashboard extends CI_Controller
 
     public function destroyCart() {
         $this->cart->destroy();
-        redirect('Dashboard');
+        redirect('dashboard');
     }
 
 	public function destroyCartById($id_product) {
