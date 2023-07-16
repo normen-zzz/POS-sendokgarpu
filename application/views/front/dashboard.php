@@ -131,6 +131,13 @@
   </div>
 </section>
 
+<script>
+	$("button").on("click", function() {
+		$("button").removeClass("selected");
+		$(this).addClass("selected");
+	});
+</script>
+
 <!-- Discount Modal -->
 <div class="modal fade" id="discountModal" tabindex="-1" aria-labelledby="discountModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -154,6 +161,45 @@
 </div>
 
 <script>
+	$(document).ready(function() {
+		$(document).on('click', '.category', function() {
+			// alert('clocker');
+			var id_category = $(this).data('id_category'); // Mendapatkan ID dari atribut data-id tombol yang diklik
+			$('#productByCategory').html('');
+			// Memuat data menggunakan AJAX dengan mengirimkan ID sebagai parameter
+			$.ajax({
+				url: '<?php echo base_url("Dashboard/getProductByCategory"); ?>',
+				type: 'GET',
+				dataType: 'json',
+				data: {
+					id_category: id_category
+				},
+				success: function(response) {
+					var content = '';
+					for (var i = 0; i < response.length; i++) {
+						var data = response[i];
+						content += '<div class="col-3">' +
+							'<div class="card text-center border-2 my-2 productToCart" data-id_product = "' + data.id_product + '">' +
+							'<img src="<?= base_url('assets/front') ?>/image/' + data.image + '" class="card-img-top" style="padding: 5px" alt="..." />' +
+							'<div class="card-body">' +
+							'<button class="btn stretched-link">' + data.name_product + '</button>' +
+							'</div>' +
+							'</div>' +
+							'</div>';
+					}
+					$('#productByCategory').html(content);
+
+
+				},
+				error: function() {
+					alert('Terjadi kesalahan dalam memuat data.');
+				}
+			});
+
+
+		});
+	});
+
   $(document).ready(function() {
     $(document).on('click', '.productToCart', function() {
       var id_product = $(this).data('id_product');
@@ -264,4 +310,5 @@
       $('#total-value').text('$' + (Math.round(total * 100) / 100).toFixed(2));
     }
   });
+
 </script>
