@@ -131,12 +131,6 @@
   </div>
 </section>
 
-<script>
-	$("button").on("click", function() {
-		$("button").removeClass("selected");
-		$(this).addClass("selected");
-	});
-</script>
 
 <!-- Discount Modal -->
 <div class="modal fade" id="discountModal" tabindex="-1" aria-labelledby="discountModalLabel" aria-hidden="true">
