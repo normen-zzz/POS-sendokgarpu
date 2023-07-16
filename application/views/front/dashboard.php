@@ -49,7 +49,9 @@
                     <td style="text-align: center"><?= $cart['subtotal'] ?></td>
                     <td style="text-align: center">
                       <button class="btn btn-secondary">edit</button>
-                      <button class="btn btn-danger">X</button>
+						<a href="<?= base_url('dashboard/destroyCart') ?>">
+							<button class="btn btn-danger">X</button>
+						</a>
                     </td>
                   </tr>
                 <?php } ?>
@@ -225,8 +227,8 @@
               (Math.round(data.subtotal * 100) / 100).toFixed(2) +
               '</td>' +
               '<td style="text-align: center">' +
-              '<button class="btn btn-secondary">edit</button>' +
-              '<button class="btn btn-danger">X</button>' +
+              '<button class="btn btn-secondary">edit</button> ' +
+              '<a href="<?= base_url('dashboard/destroyCart') ?>"><button class="btn btn-danger">X</button></a>' +
               '</td>' +
               '</tr>';
 
