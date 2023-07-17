@@ -52,47 +52,89 @@ class Dashboard extends CI_Controller
 
         $cart = array();
 
-        $product = $this->db->get_where('product',array('id_product' => $this->input->get('id_product')))->row_array();
-        $data = array(
-            'id' => $this->input->get('id_product'),
-            'qty' => 1,
-            'price' => $product['price_product'],
-            'name' => $product['name_product'],
-            'photo' => $product['image'],
-        );
-        $this->cart->insert($data);
-        
+        $product = $this->db->get_where('product', array('id_product' => $this->input->get('id_product')))->row_array();
 
-        foreach ($this->cart->contents() as $items){
+        if ($this->cart->contents() == NULL) {
+            $data = array(
+                'id' => $this->input->get('id_product'),
+                'qty' => 1,
+                'price' => $product['price_product'],
+                'name' => $product['name_product'],
+                'photo' => $product['image'],
+                'discount' => 0
+            );
+            $this->cart->insert($data);
+        }
+        else{
+            
+            $discount = 0;
+            foreach ($this->cart->contents() as $keranjang) {
+                $discount += $keranjang['discount'];
+                break;
+            }
+            $data = array(
+                'id' => $this->input->get('id_product'),
+                'qty' => 1,
+                'price' => $product['price_product'],
+                'name' => $product['name_product'],
+                'photo' => $product['image'],
+                'discount' => $discount
+            );
+            $this->cart->insert($data);
+        }
+       
+
+
+        foreach ($this->cart->contents() as $items) {
             $cart[] = $items;
         }
         echo json_encode($cart);
     }
 
-    public function destroyCart() {
+    public function destroyCart()
+    {
         $this->cart->destroy();
         redirect('dashboard');
     }
 
-	public function destroyCartById($id_product) {
-		$cart_contents = $this->cart->contents();
+    public function destroyCartById($id_product)
+    {
+        $cart_contents = $this->cart->contents();
 
-		foreach ($cart_contents as $item) {
-			if ($item['id'] == $id_product) {
-				$data = array(
-					'rowid' => $item['rowid'],
-					'qty' => 0
-				);
+        foreach ($cart_contents as $item) {
+            if ($item['id'] == $id_product) {
+                $data = array(
+                    'rowid' => $item['rowid'],
+                    'qty' => 0
+                );
 
-				$this->cart->update($data);
-				break; 
-			}
-		}
-		redirect('dashboard');
-	}
+                $this->cart->update($data);
+                break;
+            }
+        }
+        redirect('dashboard');
+    }
 
 
-	public function showCart() {
-        var_dump($this->cart->contents());
+    public function showCart()
+    {
+        $data = $this->cart->contents();
+        var_dump($data);
+    }
+
+    public function editCartUnit()
+    {
+        $cart = array();
+        $data = array(
+            'rowid' => $this->input->post('rowid'),
+            'qty'   => $this->input->post('newQty'),
+        );
+
+        if ($this->cart->update($data)) {
+            foreach ($this->cart->contents() as $items) {
+                $cart[] = $items;
+            }
+            echo json_encode($cart);
+        }
     }
 }
