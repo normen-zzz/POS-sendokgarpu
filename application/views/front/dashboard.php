@@ -41,7 +41,7 @@
                     <td style="text-align: center"><?= $cart['price'] ?></td>
                     <td style="text-align: center"><?= $cart['subtotal'] ?></td>
                     <td style="text-align: center">
-                      <button class="btn btn-secondary">edit</button>
+                      <button class="btn btn-secondary edit-btn">edit</button>
                       <a href="<?= base_url('dashboard/destroyCartById/' . $cart['id']) ?>"><button class="btn btn-danger">X</button></a>
                     </td>
                   </tr>
