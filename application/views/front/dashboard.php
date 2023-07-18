@@ -23,11 +23,11 @@
             <div class="pt-4 overflow-y-scroll" style="height: 50vh">
               <table class="table" id="tblcart" style="width: 100%" id="cart">
                 <tr>
-                  <td style="width: 60%">Item</td>
-                  <td style="text-align: center">Qty</td>
-                  <td style="text-align: center">Price</td>
-                  <td style="text-align: center">Total</td>
-                  <td style="text-align: center">Action</td>
+                  <th style="width: 60%">Item</th>
+                  <th style="text-align: center">Qty</th>
+                  <th style="text-align: center">Price</th>
+                  <th style="text-align: center">Total</th>
+                  <th style="text-align: center">Action</th>
                 </tr>
 
                 <?php
@@ -48,9 +48,9 @@
                     <td style="text-align: center">
                       <span class="qty-value"><?= $cart['qty'] ?></span>
                     </td>
-                    <td style="text-align: center"><?= $cart['price'] ?></td>
+                    <td style="text-align: center"><?= number_format($cart['price'], 2) ?></td>
                     <td style="text-align: center">
-                      <span class="subtotal-value"><?= $cart['subtotal'] ?></span>
+                      <span class="subtotal-value"><?= number_format($cart['subtotal'], 2) ?></span>
                     </td>
                     <td style="text-align: center">
                       <button class="btn btn-secondary edit-btn">edit</button>
@@ -79,18 +79,18 @@
               <tbody>
                 <tr>
                   <th scope="col">DISCOUNT</th>
-                  <td scope="col" colspan="3" id="discount-value">-</td>
+                  <td scope="col" colspan="3" id="discount-value"><?= $discount ?>%</td>
                 </tr>
                 <tr>
                   <th scope="col">SUBTOTAL</th>
                   <td scope="col">
                     <div id="subtotal">
-                      $<?= $subtotal ?>
+                      $<?= number_format($subtotal, 2) ?>
                     </div>
                   </td>
                   <th scope="col" class="text-end h4">Total</th>
                   <td scope="col" class="text-end h4" id="total-value">
-                    $<?= $subtotal - ($subtotal * 0.1) ?>
+                    $<?= number_format(($subtotal + ($subtotal * 0.1)) - (($subtotal + ($subtotal * 0.1)) * $discount / 100), 2) ?>
                   </td>
                 </tr>
                 <tr>
@@ -98,7 +98,7 @@
                   <td scope="col">10%</td>
                   <td scope="col" class="text-success h3 fw-bold text-end">
                     <div id="tax-value">
-                      $<?= ($subtotal * 0.1) ?>
+                      $<?= number_format($subtotal * 0.1, 2) ?>
                     </div>
                   </td>
                 </tr>
@@ -232,7 +232,7 @@
               '<td style="width: 60%">' +
               '<span class="item-name">' + data.name + '</span>' +
               '<form class="edit-form" style="display: none;">' +
-              '<input type="text" class="form-control" value="' + data.rowid + '" />' +
+              '<input type="text" class="form-control" hidden value="' + data.rowid + '" />' +
               '<input type="number" class="form-control" value="' + data.qty + '" />' +
               '<button type="submit" class="btn btn-primary save-btn">Save</button>' +
               '<button type="button" class="btn btn-secondary cancel-btn">Cancel</button>' +
@@ -241,7 +241,7 @@
               '<td style="text-align: center">' +
               '<span class="qty-value">' + data.qty + '</span>' +
               '</td>' +
-              '<td style="text-align: center">' + data.price + '</td>' +
+              '<td style="text-align: center">' + (Math.round(data.price * 100) / 100).toFixed(2) + '</td>' +
               '<td style="text-align: center">' +
               '<span class="subtotal-value">' + (Math.round(data.subtotal * 100) / 100).toFixed(2) + '</span>' +
               '</td>' +
@@ -283,9 +283,6 @@
       e.preventDefault();
       var newQty = $(this).find('input[type=number]').val();
       var rowid = $(this).find('input[type=text]').val();
-
-
-      alert(newQty + ' / ' + rowid);
       $.ajax({
         url: '<?php echo base_url("Dashboard/editCartUnit"); ?>',
         type: 'POST',
@@ -309,15 +306,16 @@
               '<td style="width: 60%">' +
               '<span class="item-name">' + data.name + '</span>' +
               '<form class="edit-form" style="display: none;">' +
+              '<input type="text" class="form-control" hidden value="' + data.rowid + '" />' +
               '<input type="number" class="form-control" value="' + data.qty + '" />' +
-              '<button data-rowid="' + data.rowid + '" type="submit" class="btn btn-primary save-btn">Save</button>' +
+              '<button type="submit" class="btn btn-primary save-btn">Save</button>' +
               '<button type="button" class="btn btn-secondary cancel-btn">Cancel</button>' +
               '</form>' +
               '</td>' +
               '<td style="text-align: center">' +
               '<span class="qty-value">' + data.qty + '</span>' +
               '</td>' +
-              '<td style="text-align: center">' + data.price + '</td>' +
+              '<td style="text-align: center">' + (Math.round(data.price * 100) / 100).toFixed(2) + '</td>' +
               '<td style="text-align: center">' +
               '<span class="subtotal-value">' + (Math.round(data.subtotal * 100) / 100).toFixed(2) + '</span>' +
               '</td>' +
@@ -342,8 +340,24 @@
     $('#applyDiscountBtn').on('click', function() {
       var discount = $('#discountInput').val();
       $('#discount-value').text(discount + '%');
-      updateTotal();
-      $('#discountModal').modal('hide');
+
+
+
+      $.ajax({
+        url: '<?php echo base_url("Dashboard/addDiscount"); ?>',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          discount: discount,
+        },
+        success: function(response) {
+          updateTotal();
+          $('#discountModal').modal('hide');
+        },
+        error: function() {
+          alert('Terjadi kesalahan dalam memuat data.');
+        }
+      });
     });
 
     function updateTotal() {
@@ -354,7 +368,7 @@
 
       var tax = subtotal * 0.1;
       var discount = parseFloat($('#discount-value').text()) || 0;
-      var total = subtotal + tax - (subtotal * discount / 100);
+      var total = subtotal + tax - ((subtotal + tax) * discount / 100);
 
       $('#subtotal').text('$' + (Math.round(subtotal * 100) / 100).toFixed(2));
       $('#tax-value').text('$' + (Math.round(tax * 100) / 100).toFixed(2));

@@ -25,11 +25,21 @@ class Dashboard extends CI_Controller
     {
         $this->_has_login();
         // echo "masuk dashboard";
+        $discount = 0;
+        if ($this->cart->contents() != NULL) {
+
+            foreach ($this->cart->contents() as $keranjang) {
+                $discount += $keranjang['discount'];
+                break;
+            }
+        }
+
         $data = [
             'title' => 'Dashboard',
             'user' =>  $this->user,
             'category' => $this->db->get('category'),
             'product' => $this->db->get('product'),
+            'discount' => $discount
         ];
         $this->template->load('front/templates/dashboard', 'front/dashboard', $data);
     }
@@ -64,9 +74,8 @@ class Dashboard extends CI_Controller
                 'discount' => 0
             );
             $this->cart->insert($data);
-        }
-        else{
-            
+        } else {
+
             $discount = 0;
             foreach ($this->cart->contents() as $keranjang) {
                 $discount += $keranjang['discount'];
@@ -82,7 +91,7 @@ class Dashboard extends CI_Controller
             );
             $this->cart->insert($data);
         }
-       
+
 
 
         foreach ($this->cart->contents() as $items) {
@@ -136,5 +145,22 @@ class Dashboard extends CI_Controller
             }
             echo json_encode($cart);
         }
+    }
+
+    public function addDiscount()
+    {
+
+        $discount = $this->input->post('discount');
+
+        foreach ($this->cart->contents() as $cart) {
+            $data = array(
+                'rowid' => $cart['rowid'],
+                'discount'   => $discount,
+            );
+            $this->cart->update($data);
+        }
+
+        echo json_encode('hehe');
+
     }
 }
