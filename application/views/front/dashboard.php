@@ -54,7 +54,7 @@
                     </td>
                     <td style="text-align: center">
                       <button class="btn btn-secondary edit-btn">edit</button>
-                      <a href="<?= base_url('dashboard/destroyCartById/' . $cart['id']) ?>"><button class="btn btn-danger">X</button></a>
+                      <button data-rowid="<?= $cart['rowid'] ?>" class="btn btn-danger mt-2 destroyCartById">X</button>
                     </td>
                   </tr>
                 <?php } ?>
@@ -98,7 +98,7 @@
                   <td scope="col">10%</td>
                   <td scope="col" class="text-success h3 fw-bold text-end">
                     <div id="tax-value">
-                      $<?= number_format($subtotal * 0.1, 2) ?>
+                      $<?= number_format(($subtotal - (($discount / 100) * $subtotal)) * 0.1, 2) ?>
                     </div>
                   </td>
                 </tr>
@@ -218,44 +218,27 @@
           id_product: id_product
         },
         success: function(response) {
-          var content = '<tr>' +
-            '<th style="width: 60%">Item</th>' +
-            '<th style="text-align: center">Qty</th>' +
-            '<th style="text-align: center">Price</th>' +
-            '<th style="text-align: center">Total</th>' +
-            '<th style="text-align: center">Action</th>' +
-            '</tr>';
-          var subtotal = 0;
-          for (var i = 0; i < response.length; i++) {
-            var data = response[i];
-            content += '<tr>' +
-              '<td style="width: 60%">' +
-              '<span class="item-name">' + data.name + '</span>' +
-              '<form class="edit-form" style="display: none;">' +
-              '<input type="text" class="form-control" hidden value="' + data.rowid + '" />' +
-              '<input type="number" class="form-control" value="' + data.qty + '" />' +
-              '<button type="submit" class="btn btn-primary save-btn">Save</button>' +
-              '<button type="button" class="btn btn-secondary cancel-btn">Cancel</button>' +
-              '</form>' +
-              '</td>' +
-              '<td style="text-align: center">' +
-              '<span class="qty-value">' + data.qty + '</span>' +
-              '</td>' +
-              '<td style="text-align: center">' + (Math.round(data.price * 100) / 100).toFixed(2) + '</td>' +
-              '<td style="text-align: center">' +
-              '<span class="subtotal-value">' + (Math.round(data.subtotal * 100) / 100).toFixed(2) + '</span>' +
-              '</td>' +
-              '<td style="text-align: center">' +
-              '<button class="btn btn-secondary edit-btn">edit</button> ' +
-              '<a href="<?= base_url('dashboard/destroyCartById/') ?>' + data.id + '""><button class="btn btn-danger">X</button></a>' +
-              '</td>' +
-              '</tr>';
+          updateContent(response);
+        },
+        error: function() {
+          alert('Terjadi kesalahan dalam memuat data.');
+        }
+      });
+    });
 
-            subtotal += data.subtotal;
-          }
-          $('#tblcart').html(content);
-          $('#subtotal').html('$' + (Math.round(subtotal * 100) / 100).toFixed(2));
-          updateTotal();
+
+    $(document).on('click', '.destroyCartById', function() {
+      var rowid = $(this).data('rowid');
+
+      $.ajax({
+        url: '<?php echo base_url("Dashboard/destroyCartById"); ?>',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          rowid: rowid
+        },
+        success: function(response) {
+          updateContent(response);
         },
         error: function() {
           alert('Terjadi kesalahan dalam memuat data.');
@@ -292,44 +275,7 @@
           newQty: newQty
         },
         success: function(response) {
-          var content = '<tr>' +
-            '<th style="width: 60%">Item</th>' +
-            '<th style="text-align: center">Qty</th>' +
-            '<th style="text-align: center">Price</th>' +
-            '<th style="text-align: center">Total</th>' +
-            '<th style="text-align: center">Action</th>' +
-            '</tr>';
-          var subtotal = 0;
-          for (var i = 0; i < response.length; i++) {
-            var data = response[i];
-            content += '<tr>' +
-              '<td style="width: 60%">' +
-              '<span class="item-name">' + data.name + '</span>' +
-              '<form class="edit-form" style="display: none;">' +
-              '<input type="text" class="form-control" hidden value="' + data.rowid + '" />' +
-              '<input type="number" class="form-control" value="' + data.qty + '" />' +
-              '<button type="submit" class="btn btn-primary save-btn">Save</button>' +
-              '<button type="button" class="btn btn-secondary cancel-btn">Cancel</button>' +
-              '</form>' +
-              '</td>' +
-              '<td style="text-align: center">' +
-              '<span class="qty-value">' + data.qty + '</span>' +
-              '</td>' +
-              '<td style="text-align: center">' + (Math.round(data.price * 100) / 100).toFixed(2) + '</td>' +
-              '<td style="text-align: center">' +
-              '<span class="subtotal-value">' + (Math.round(data.subtotal * 100) / 100).toFixed(2) + '</span>' +
-              '</td>' +
-              '<td style="text-align: center">' +
-              '<button class="btn btn-secondary edit-btn">edit</button> ' +
-              '<a href="<?= base_url('dashboard/destroyCartById/') ?>' + data.id + '""><button class="btn btn-danger">X</button></a>' +
-              '</td>' +
-              '</tr>';
-
-            subtotal += data.subtotal;
-          }
-          $('#tblcart').html(content);
-          $('#subtotal').html('$' + (Math.round(subtotal * 100) / 100).toFixed(2));
-          updateTotal();
+          updateContent(response);
         },
         error: function() {
           alert('Terjadi kesalahan dalam memuat data.');
@@ -366,13 +312,56 @@
         subtotal += parseFloat($(this).text());
       });
 
-      var tax = subtotal * 0.1;
+
       var discount = parseFloat($('#discount-value').text()) || 0;
-      var total = subtotal + tax - ((subtotal + tax) * discount / 100);
+      var tax = (subtotal - ((discount / 100) * subtotal)) * 0.1;
+
+      var total = (subtotal-((discount/100)*subtotal)) + tax;
 
       $('#subtotal').text('$' + (Math.round(subtotal * 100) / 100).toFixed(2));
       $('#tax-value').text('$' + (Math.round(tax * 100) / 100).toFixed(2));
       $('#total-value').text('$' + (Math.round(total * 100) / 100).toFixed(2));
+    }
+
+    function updateContent(response) {
+      var content = '<tr>' +
+        '<th style="width: 60%">Item</th>' +
+        '<th style="text-align: center">Qty</th>' +
+        '<th style="text-align: center">Price</th>' +
+        '<th style="text-align: center">Total</th>' +
+        '<th style="text-align: center">Action</th>' +
+        '</tr>';
+      var subtotal = 0;
+      for (var i = 0; i < response.length; i++) {
+        var data = response[i];
+        content += '<tr>' +
+          '<td style="width: 60%">' +
+          '<span class="item-name">' + data.name + '</span>' +
+          '<form class="edit-form" style="display: none;">' +
+          '<input type="text" class="form-control" hidden value="' + data.rowid + '" />' +
+          '<input type="number" class="form-control" value="' + data.qty + '" />' +
+          '<button type="submit" class="btn btn-primary save-btn">Save</button>' +
+          '<button type="button" class="btn btn-secondary cancel-btn">Cancel</button>' +
+          '</form>' +
+          '</td>' +
+          '<td style="text-align: center">' +
+          '<span class="qty-value">' + data.qty + '</span>' +
+          '</td>' +
+          '<td style="text-align: center">' + (Math.round(data.price * 100) / 100).toFixed(2) + '</td>' +
+          '<td style="text-align: center">' +
+          '<span class="subtotal-value">' + (Math.round(data.subtotal * 100) / 100).toFixed(2) + '</span>' +
+          '</td>' +
+          '<td style="text-align: center">' +
+          '<button class="btn btn-secondary edit-btn">edit</button> ' +
+          '<button data-rowid="' + data.rowid + '" class="btn btn-danger mt-2 destroyCartById">X</button>' +
+          '</td>' +
+          '</tr>';
+
+        subtotal += data.subtotal;
+      }
+      $('#tblcart').html(content);
+      $('#subtotal').html('$' + (Math.round(subtotal * 100) / 100).toFixed(2));
+      updateTotal();
     }
   });
 </script>

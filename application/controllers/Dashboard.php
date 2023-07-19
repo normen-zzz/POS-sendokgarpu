@@ -106,22 +106,23 @@ class Dashboard extends CI_Controller
         redirect('dashboard');
     }
 
-    public function destroyCartById($id_product)
+    public function destroyCartById()
     {
-        $cart_contents = $this->cart->contents();
+        $cart = array();
+        $rowid = $this->input->post('rowid');
 
-        foreach ($cart_contents as $item) {
-            if ($item['id'] == $id_product) {
-                $data = array(
-                    'rowid' => $item['rowid'],
-                    'qty' => 0
-                );
+        $data = array(
+            'rowid' => $rowid,
+            'qty' => 0
+        );
 
-                $this->cart->update($data);
-                break;
+        if ($this->cart->update($data)) {
+            foreach ($this->cart->contents() as $items) {
+                $cart[] = $items;
             }
+            echo json_encode($cart);
         }
-        redirect('dashboard');
+       
     }
 
 
@@ -163,4 +164,6 @@ class Dashboard extends CI_Controller
         echo json_encode('hehe');
 
     }
+
+    
 }
