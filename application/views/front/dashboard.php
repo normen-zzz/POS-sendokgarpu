@@ -4,6 +4,7 @@
     color: white;
   }
 </style>
+
 <section>
   <div class="container-fluid">
     <div class="row">
@@ -20,21 +21,13 @@
               </button>
             </form>
             <div class="pt-4 overflow-y-scroll" style="height: 50vh">
-              <table class="table" style="width: 100%" id="cart">
+              <table class="table" id="tblcart" style="width: 100%" id="cart">
                 <tr>
-                  <td style="width: 60%">Item</td>
-                  <td style="text-align: center">Qty</td>
-                  <td style="text-align: center">
-                    Price
-                  </td>
-
-                  <td style="text-align: center">
-                    Total
-                  </td>
-
-                  <td style="text-align: center">
-                    Action
-                  </td>
+                  <th style="width: 60%">Item</th>
+                  <th style="text-align: center">Qty</th>
+                  <th style="text-align: center">Price</th>
+                  <th style="text-align: center">Total</th>
+                  <th style="text-align: center">Action</th>
                 </tr>
 
                 <?php
@@ -43,13 +36,25 @@
                   $subtotal += $cart['subtotal'];
                 ?>
                   <tr>
-                    <td style="width: 60%"><?= $cart['name'] ?></td>
-                    <td style="text-align: center"><?= $cart['qty'] ?></td>
-                    <td style="text-align: center"><?= $cart['price'] ?></td>
-                    <td style="text-align: center"><?= $cart['subtotal'] ?></td>
+                    <td style="width: 60%">
+                      <span class="item-name"><?= $cart['name'] ?></span>
+                      <form class="edit-form" style="display: none;">
+                        <input type="number" class="form-control" value="<?= $cart['qty'] ?>" />
+                        <input type="text" class="form-control" value="<?= $cart['rowid'] ?>" hidden />
+                        <button class="btn btn-primary save-btn">Save</button>
+                        <button type="button" class="btn btn-secondary cancel-btn">Cancel</button>
+                      </form>
+                    </td>
                     <td style="text-align: center">
-                      <button class="btn btn-secondary">edit</button>
-                      <button class="btn btn-danger">X</button>
+                      <span class="qty-value"><?= $cart['qty'] ?></span>
+                    </td>
+                    <td style="text-align: center"><?= number_format($cart['price'], 2) ?></td>
+                    <td style="text-align: center">
+                      <span class="subtotal-value"><?= number_format($cart['subtotal'], 2) ?></span>
+                    </td>
+                    <td style="text-align: center">
+                      <button class="btn btn-secondary edit-btn">edit</button>
+                      <button data-rowid="<?= $cart['rowid'] ?>" class="btn btn-danger mt-2 destroyCartById">X</button>
                     </td>
                   </tr>
                 <?php } ?>
@@ -74,25 +79,27 @@
               <tbody>
                 <tr>
                   <th scope="col">DISCOUNT</th>
-                  <td scope="col" colspan="3">-</td>
+                  <td scope="col" colspan="3" id="discount-value"><?= $discount ?>%</td>
                 </tr>
                 <tr>
                   <th scope="col">SUBTOTAL</th>
                   <td scope="col">
                     <div id="subtotal">
-                      $<?= $subtotal ?>
+                      $<?= number_format($subtotal, 2) ?>
                     </div>
                   </td>
                   <th scope="col" class="text-end h4">Total</th>
+                  <td scope="col" class="text-end h4" id="total-value">
+                    $<?= number_format(($subtotal + ($subtotal * 0.1)) - (($subtotal + ($subtotal * 0.1)) * $discount / 100), 2) ?>
+                  </td>
                 </tr>
                 <tr>
                   <th scope="col">TAX</th>
-                  <td scope="col">10% + Student Disc.</td>
+                  <td scope="col">10%</td>
                   <td scope="col" class="text-success h3 fw-bold text-end">
-                    <div id="finalTotal">
-                      $<?= $subtotal + ($subtotal * 0.1) ?>
+                    <div id="tax-value">
+                      $<?= number_format(($subtotal - (($discount / 100) * $subtotal)) * 0.1, 2) ?>
                     </div>
-
                   </td>
                 </tr>
                 <tr>
@@ -105,7 +112,7 @@
                     <button class="btn btn-outline-dark w-100">SEND</button>
                   </td>
                   <td>
-                    <button class="btn btn-outline-dark w-100">
+                    <button class="btn btn-outline-dark w-100" data-bs-toggle="modal" data-bs-target="#discountModal">
                       DISCOUNT
                     </button>
                   </td>
@@ -136,12 +143,28 @@
   </div>
 </section>
 
-<script>
-  $("button").on("click", function() {
-    $("button").removeClass("selected");
-    $(this).addClass("selected");
-  });
-</script>
+
+<!-- Discount Modal -->
+<div class="modal fade" id="discountModal" tabindex="-1" aria-labelledby="discountModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="discountModalLabel">Apply Discount</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="discountInput" class="form-label">Discount (%)</label>
+          <input type="number" class="form-control" id="discountInput" placeholder="Enter discount percentage">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="applyDiscountBtn">Apply</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
   $(document).ready(function() {
@@ -182,15 +205,11 @@
 
     });
   });
-</script>
 
-<script>
   $(document).ready(function() {
     $(document).on('click', '.productToCart', function() {
+      var id_product = $(this).data('id_product');
 
-      var id_product = $(this).data('id_product'); // Mendapatkan ID dari atribut data-id tombol yang diklik
-
-      // Memuat data menggunakan AJAX dengan mengirimkan ID sebagai parameter
       $.ajax({
         url: '<?php echo base_url("Dashboard/add_to_cart"); ?>',
         type: 'GET',
@@ -199,45 +218,7 @@
           id_product: id_product
         },
         success: function(response) {
-          var content = '<tr>' +
-            '<td style="width: 60%">Item</td>' +
-            '<td style="text-align: center">Qty</td>' +
-            '<td style="text-align: center">' +
-            'Price' +
-            '</td>' +
-            '<td style="text-align: center">' +
-            'Total' +
-            '</td>' +
-            '<td style="text-align: center">' +
-            'Action' +
-            '</td>' +
-            '</tr>';
-          var subtotal = 0;
-          for (var i = 0; i < response.length; i++) {
-            var data = response[i];
-            content += '<tr>' +
-              '<td style="width: 60%">' + data.name + '</td>' +
-              '<td style="text-align: center">' + data.qty + '</td>' +
-              '<td style="text-align: center">' +
-              data.price +
-              '</td>' +
-              '<td style="text-align: center">' +
-              (Math.round(data.subtotal * 100) / 100).toFixed(2) +
-              '</td>' +
-              '<td style="text-align: center">' +
-              '<button class="btn btn-secondary">edit</button>' +
-              '<button class="btn btn-danger">X</button>' +
-              '</td>' +
-              '</tr>';
-
-            subtotal += data.subtotal;
-          }
-          $('#cart').html(content);
-          $('#subtotal').html('$' + (Math.round(subtotal * 100) / 100).toFixed(2));
-          $('#finalTotal').html('$' + (Math.round((subtotal + (subtotal * 0.1)) * 100) / 100).toFixed(2));
-
-
-
+          updateContent(response);
         },
         error: function() {
           alert('Terjadi kesalahan dalam memuat data.');
@@ -246,7 +227,141 @@
     });
 
 
+    $(document).on('click', '.destroyCartById', function() {
+      var rowid = $(this).data('rowid');
+
+      $.ajax({
+        url: '<?php echo base_url("Dashboard/destroyCartById"); ?>',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          rowid: rowid
+        },
+        success: function(response) {
+          updateContent(response);
+        },
+        error: function() {
+          alert('Terjadi kesalahan dalam memuat data.');
+        }
+      });
+    });
+
+    $(document).on('click', '.edit-btn', function() {
+      var $tableRow = $(this).closest('tr');
+      $tableRow.find('.item-name').hide();
+      $tableRow.find('.qty-value').hide();
+      $tableRow.find('.subtotal-value').hide();
+      $tableRow.find('.edit-form').show();
+    });
+
+    $(document).on('click', '.cancel-btn', function() {
+      var $tableRow = $(this).closest('tr');
+      $tableRow.find('.edit-form').hide();
+      $tableRow.find('.item-name').show();
+      $tableRow.find('.qty-value').show();
+      $tableRow.find('.subtotal-value').show();
+    });
+
+    $(document).on('submit', '.edit-form', function(e) {
+      e.preventDefault();
+      var newQty = $(this).find('input[type=number]').val();
+      var rowid = $(this).find('input[type=text]').val();
+      $.ajax({
+        url: '<?php echo base_url("Dashboard/editCartUnit"); ?>',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          rowid: rowid,
+          newQty: newQty
+        },
+        success: function(response) {
+          updateContent(response);
+        },
+        error: function() {
+          alert('Terjadi kesalahan dalam memuat data.');
+        }
+      });
+    });
+
+    $('#applyDiscountBtn').on('click', function() {
+      var discount = $('#discountInput').val();
+      $('#discount-value').text(discount + '%');
 
 
+
+      $.ajax({
+        url: '<?php echo base_url("Dashboard/addDiscount"); ?>',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          discount: discount,
+        },
+        success: function(response) {
+          updateTotal();
+          $('#discountModal').modal('hide');
+        },
+        error: function() {
+          alert('Terjadi kesalahan dalam memuat data.');
+        }
+      });
+    });
+
+    function updateTotal() {
+      var subtotal = 0;
+      $('.subtotal-value').each(function() {
+        subtotal += parseFloat($(this).text());
+      });
+
+
+      var discount = parseFloat($('#discount-value').text()) || 0;
+      var tax = (subtotal - ((discount / 100) * subtotal)) * 0.1;
+
+      var total = (subtotal-((discount/100)*subtotal)) + tax;
+
+      $('#subtotal').text('$' + (Math.round(subtotal * 100) / 100).toFixed(2));
+      $('#tax-value').text('$' + (Math.round(tax * 100) / 100).toFixed(2));
+      $('#total-value').text('$' + (Math.round(total * 100) / 100).toFixed(2));
+    }
+
+    function updateContent(response) {
+      var content = '<tr>' +
+        '<th style="width: 60%">Item</th>' +
+        '<th style="text-align: center">Qty</th>' +
+        '<th style="text-align: center">Price</th>' +
+        '<th style="text-align: center">Total</th>' +
+        '<th style="text-align: center">Action</th>' +
+        '</tr>';
+      var subtotal = 0;
+      for (var i = 0; i < response.length; i++) {
+        var data = response[i];
+        content += '<tr>' +
+          '<td style="width: 60%">' +
+          '<span class="item-name">' + data.name + '</span>' +
+          '<form class="edit-form" style="display: none;">' +
+          '<input type="text" class="form-control" hidden value="' + data.rowid + '" />' +
+          '<input type="number" class="form-control" value="' + data.qty + '" />' +
+          '<button type="submit" class="btn btn-primary save-btn">Save</button>' +
+          '<button type="button" class="btn btn-secondary cancel-btn">Cancel</button>' +
+          '</form>' +
+          '</td>' +
+          '<td style="text-align: center">' +
+          '<span class="qty-value">' + data.qty + '</span>' +
+          '</td>' +
+          '<td style="text-align: center">' + (Math.round(data.price * 100) / 100).toFixed(2) + '</td>' +
+          '<td style="text-align: center">' +
+          '<span class="subtotal-value">' + (Math.round(data.subtotal * 100) / 100).toFixed(2) + '</span>' +
+          '</td>' +
+          '<td style="text-align: center">' +
+          '<button class="btn btn-secondary edit-btn">edit</button> ' +
+          '<button data-rowid="' + data.rowid + '" class="btn btn-danger mt-2 destroyCartById">X</button>' +
+          '</td>' +
+          '</tr>';
+
+        subtotal += data.subtotal;
+      }
+      $('#tblcart').html(content);
+      $('#subtotal').html('$' + (Math.round(subtotal * 100) / 100).toFixed(2));
+      updateTotal();
+    }
   });
 </script>

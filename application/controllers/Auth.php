@@ -14,7 +14,7 @@ class Auth extends CI_Controller
     private function _has_login()
     {
         if ($this->session->has_userdata('login_session')) {
-            redirect('Dashboard');
+            redirect('dashboard');
         }
     }
 
@@ -46,7 +46,7 @@ class Auth extends CI_Controller
                             'timestamp' => time()
                         ];
                         $this->session->set_userdata('login_session', $userdata);
-                        redirect('Dashboard');
+                        redirect('dashboard');
                     }
                
             } else {
